@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit task</title>
+</head>
+<body>
+    <form th:method="patch" th:action="@{/tasks/{id}/edit(id=${task.getId()})}" th:object="${task}">
+        <label for="description">Description:</label>
+        <input type="text" th:field="*{description}" id="description"/>
+        <br/>
+        <label for="status">Status:</label>
+        <select th:object="${task}" th:field="*{status}" id="status">
+            <option th:each="status : ${statusList}" th:value="${status.name()}"
+                    th:text="${status.name()}"></option>
+        </select>
+        <br/>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

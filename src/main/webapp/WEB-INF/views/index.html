@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List</title>
+</head>
+<body>
+  <h2>To-Do List</h2>
+  <table border="2" width="70" cellpadding="2">
+    <tr><th>Id</th><th>Description</th><th>Status</th></tr>
+    <tr th:each="task: ${tasks}">
+      <td th:text="${task.getId()}"></td>
+      <td th:text="${task.getDescription()}"></td>
+      <td th:text="${task.getStatus()}"></td>
+      <td><form th:method="get" th:action="@{/tasks/{id}/edit(id=${task.getId()})}">
+        <input type="submit" value="Edit">
+      </form></td>
+      <td><form th:method="delete" th:action="@{/tasks/{id}(id=${task.getId()})}">
+        <input type="submit" value="Delete">
+      </form></td>
+    </tr>
+  </table>
+  <form th:method="post" th:action="@{/tasks/new}" th:object="${newTask}">
+    <p>Add new task:</p>
+    <label>
+      <input type="text" th:field="*{description}"/>
+    </label>
+    <label>
+      <select th:object="${newTask}" th:field="*{status}">
+        <option th:each="status : ${statusList}" th:value="${status.name()}"
+                th:text="${status.name()}"></option>
+      </select>
+    </label>
+    <br/>
+    <input type="submit" value="Save">
+  </form>
+  <hr/>
+</body>
+</html>
