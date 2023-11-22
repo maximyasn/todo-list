@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/tasks")
@@ -28,14 +30,18 @@ public class TaskController {
     }
 
     @GetMapping
-    public String index(@RequestParam(value = "page", required = false) Integer page,
-                        @RequestParam(value = "tasks_per_page", required = false) Integer tasksPerPage,
+    public String index(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                        @RequestParam(value = "tasks_per_page", required = false, defaultValue = "10") Integer tasksPerPage,
                         @ModelAttribute("newTask") Task task,
                         Model model) {
-        if(page == null || tasksPerPage == null) {
-            model.addAttribute("tasks", taskService.findAll());
-        } else {
-            model.addAttribute("tasks", taskService.findAllByPage(page, tasksPerPage));
+
+        List<Task> all = taskService.findAllByPage((page - 1) * tasksPerPage, tasksPerPage);
+        model.addAttribute("tasks", all);
+
+        int totalPages = (int) Math.ceil(1.0 * taskService.getAllCount() / tasksPerPage);
+        if(totalPages > 1) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
         }
         return "index";
     }

@@ -35,5 +35,11 @@
     <input type="submit" value="Save">
   </form>
   <hr/>
+  <h2>
+    <button th:each="pageNumber : ${pageNumbers}">
+      <a th:href="@{/tasks(page=${pageNumber}, tasksPerPage=10)}"
+         th:text="${pageNumber}"/>
+    </button>
+  </h2>
 </body>
 </html>

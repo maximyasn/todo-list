@@ -33,11 +33,19 @@ public class TaskDao {
                 .getResultList();
     }
 
-    public List<Task> findAllByPage(Integer page, Integer tasksPerPage) {
+    public List<Task> findAllByPage(Integer offset, Integer limit) {
         Session currentSession = sessionFactory.getCurrentSession();
         return currentSession.createQuery("select t from Task t", Task.class)
-                .setFirstResult((page-1) * tasksPerPage)
-                .setMaxResults(tasksPerPage).getResultList();
+                .setFirstResult(offset)
+                .setMaxResults(limit).getResultList();
+    }
+
+    public int getAllCount() {
+        Session currentSession = sessionFactory.getCurrentSession();
+        Long singleResult = currentSession
+                .createQuery("select count(*) from Task", Long.class)
+                .getSingleResult();
+        return Math.toIntExact(singleResult);
     }
 
     public Task findOne(Integer id) {

@@ -23,7 +23,6 @@ public class TaskService {
         taskDao.save(task);
     }
 
-    @Transactional
     public void updateTask(Task task) {
         taskDao.update(task);
     }
@@ -36,11 +35,11 @@ public class TaskService {
         return taskDao.findOne(id);
     }
 
-    public List<Task> findAll() {
-        return taskDao.findAll();
+    public List<Task> findAllByPage(Integer offset, Integer limit) {
+        return taskDao.findAllByPage(offset, limit);
     }
 
-    public List<Task> findAllByPage(Integer page, Integer tasksPerPage) {
-        return taskDao.findAllByPage(page, tasksPerPage);
+    public int getAllCount() {
+        return taskDao.getAllCount();
     }
 }
